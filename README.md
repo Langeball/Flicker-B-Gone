@@ -12,5 +12,7 @@ https://coding.horje.com/example/137550-failed-to-load-openh264-library:-openh26
 
 // If your input video is using a different codec, you can manually change the "fourcc" variable to: fourcc = cv2.VideoWriter_fourcc(*'X264')
 And then follow the steps in the link above.
+
+// The output video will not have any audio, so you will have to splice it back in with your original footage. There shouldn't be any desync, since no frames are actually removed, only duplicated
   
 If you have any questions, feel free to ask. I'm using this as an exercise and will be making the script much more user friendly over time.
