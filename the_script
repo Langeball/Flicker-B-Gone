@@ -1,0 +1,65 @@
+import cv2
+import numpy as np
+
+# TODO:
+# More pixel equality checks?
+# Remove color checks because flickers can be any colour really
+# Interface using tkinter
+# Audio? Unlikely. Splice with old video
+# Pack into exe file?
+# Codecs. Only work with open openh264?
+
+# https://coding.horje.com/example/137550-failed-to-load-openh264-library:-openh264-1.8.0-win64.dll-code-example
+# ^ Fix for codec not found/installed error
+
+# Open the input video file. Use raw string
+cap = cv2.VideoCapture(r'C:\Users\??????\Videos\??????\FIX_FLICKER.mp4')  # <-- LOCATION OF VIDEO
+
+# Get the video codec and frame size of the input video
+fourcc = int(cap.get(cv2.CAP_PROP_FOURCC))
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Open the output video file
+out = cv2.VideoWriter('output2.mp4', fourcc, fps, (width, height))
+
+# Set the frame position pointer to the beginning of the video
+cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+# Initialize previous frame as None, so we can override empty frames with it later
+prev_frame = None
+
+# Loop over the frames of the input video file
+print("Work in progress!")
+while cap.isOpened():
+    # Read a frame from the input video file
+    ret, frame = cap.read()
+
+    # If valid frame, do stuff
+    if ret:
+
+        # Saves the colour values at x&y location in a numpy.ndarray
+        # We check two places in case mouse cursor was at one of the locations
+        pixel_color1 = frame[50, 50]
+        pixel_color2 = frame[100, 100]
+
+        # If all values in array are 0 (black pixel, in which case it's most likely a black screen)
+        # Or if both pixels are the exact same colour, but not necessarily pitch black
+        if np.all(pixel_color1 == 0) or np.all(pixel_color2 == 0) or np.array_equal(pixel_color1, pixel_color2):
+            # If first frame is black, it won't be written. Also prevents crash, which is good
+            if prev_frame is not None:
+                out.write(prev_frame)
+        else:
+        # Write the modified frame to the output video file
+            out.write(frame)
+            prev_frame = frame
+    else:
+        # If there are no more frames to read, break out of the loop
+        print("No more valid frames")
+        break
+
+# Release the video capture and writer objects
+cap.release()
+out.release()
+print("Work complete!")
