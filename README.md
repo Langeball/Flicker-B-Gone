@@ -1,6 +1,6 @@
 # Flicker-B-Gone
 WIP software to remove flicker from buggy screencaps, like Shadowplay.
-The way it works is by copying and pasting frames from an input, to an output. But whenever the script detects a flicker, it instead copy/pastes the last viable frame (frame that isn't a flicker). It does this by simply reading colour information of a few pixels. If they are all the exact same colour, it's most likely a flicker.
+The way it works is whenever the script detects a flicker(colour values are the same across multiple points), it overwrites the flicker frame with the closest viable frame (frame that isn't a flicker).
 
 "Before and after" video example to showcase effectiveness:
 
